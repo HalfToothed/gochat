@@ -17,6 +17,7 @@
         background: #f9f9f9;
       }
       #messages {
+        margin: 5px 0;
         height: 300px;
         overflow-y: scroll;
         border: 1px solid #ddd;
@@ -46,6 +47,9 @@
   <body>
     <div id="chat">
       <h1>Go Chat</h1>
+      <div>
+        <input type="text" id="username" placeholder="Enter Username" autocomplete="off"/>
+      </div>
       <div id="messages"></div>
 
       <form id="input-form">
@@ -64,6 +68,7 @@
 
       const messagesDiv = document.getElementById("messages");
       const messageInput = document.getElementById("message-input");
+      const username = document.getElementById("username");
       const form = document.getElementById("input-form");
 
       // Connect to WebSocket server
@@ -73,16 +78,22 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        Input.User = "User";
+        if(!username.value || username.value.trim() === ""){
+          alert("Enter Username");
+          return;
+        }
+
+        if(!messageInput.value){
+          return;
+        }
+
+        Input.User = username.value;
         Input.Text = messageInput.value;
 
-        var jsonConvert = JSON.stringify(Input);
+        let message = JSON.stringify(Input);
 
-        console.log(jsonConvert);
-
-        const message = messageInput.value;
-        if (jsonConvert) {
-          ws.send(jsonConvert);
+        if (message) {
+          ws.send(message);
           messageInput.value = "";
         }
       });
