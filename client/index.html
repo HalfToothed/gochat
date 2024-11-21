@@ -4,45 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GoChat</title>
-    <style>
-      /* Styling remains the same */
-      body {
-        font-family: Arial, sans-serif;
-      }
-      #chat {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        background: #f9f9f9;
-      }
-      #messages {
-        margin: 5px 0;
-        height: 300px;
-        overflow-y: scroll;
-        border: 1px solid #ddd;
-        padding: 10px;
-      }
-      .message {
-        margin: 5px 0;
-      }
-      #input-form {
-        display: flex;
-        margin-top: 10px;
-      }
-      #message-input {
-        flex-grow: 1;
-        padding: 10px;
-        border: 1px solid #ddd;
-      }
-      #send-button {
-        padding: 10px;
-        background: #28a745;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div id="chat">
@@ -62,49 +24,6 @@
         <button id="send-button">Send</button>
       </form>
     </div>
-
-    <script>
-      const Input = {};
-
-      const messagesDiv = document.getElementById("messages");
-      const messageInput = document.getElementById("message-input");
-      const username = document.getElementById("username");
-      const form = document.getElementById("input-form");
-
-      // Connect to WebSocket server
-      const ws = new WebSocket("ws://localhost:3000");
-
-      // Handle form submission for text messages
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        if(!username.value || username.value.trim() === ""){
-          alert("Enter Username");
-          return;
-        }
-
-        if(!messageInput.value){
-          return;
-        }
-
-        Input.User = username.value;
-        Input.Text = messageInput.value;
-
-        let message = JSON.stringify(Input);
-
-        if (message) {
-          ws.send(message);
-          messageInput.value = "";
-        }
-      });
-
-      ws.onmessage = (event) => {
-        const newMessage = document.createElement("div");
-        newMessage.classList.add("message");
-        newMessage.textContent = event.data; // This should display the text
-        messagesDiv.appendChild(newMessage);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      };
-    </script>
+    <script src="main.js"></script>
   </body>
 </html>
