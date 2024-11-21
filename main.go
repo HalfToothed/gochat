@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,11 @@ import (
 )
 
 var clients []*websocket.Conn
+
+type Input struct {
+	User string
+	Text string
+}
 
 func main() {
 
@@ -30,7 +36,6 @@ func main() {
 		}
 
 		log.Println("Websocket Connected!")
-
 		listen(websocket)
 
 	})
@@ -45,7 +50,7 @@ func listen(conn *websocket.Conn) {
 	for {
 
 		messageType, messageContent, err := conn.ReadMessage()
-		//timeRecieve := time.Now()
+
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
 				removeClient(conn)
@@ -54,15 +59,15 @@ func listen(conn *websocket.Conn) {
 			return
 		}
 
-		fmt.Println(clients)
+		var content Input
+		json.Unmarshal([]byte(messageContent), &content)
 
-		messageResponse := fmt.Sprintf(" %s", messageContent)
+		messageResponse := fmt.Sprintf("%s: %s", content.User, content.Text)
 
 		for _, client := range clients {
 			client.WriteMessage(messageType, []byte(messageResponse))
 		}
 	}
-
 }
 
 func removeClient(client *websocket.Conn) {
