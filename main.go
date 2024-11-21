@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -16,6 +15,9 @@ func main() {
 	upgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +35,7 @@ func main() {
 
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":3000", nil)
 }
 
 func listen(conn *websocket.Conn) {
@@ -43,7 +45,7 @@ func listen(conn *websocket.Conn) {
 	for {
 
 		messageType, messageContent, err := conn.ReadMessage()
-		timeRecieve := time.Now()
+		//timeRecieve := time.Now()
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
 				removeClient(conn)
@@ -54,7 +56,7 @@ func listen(conn *websocket.Conn) {
 
 		fmt.Println(clients)
 
-		messageResponse := fmt.Sprintf("messageContnet: %s \n timeRecived: %v", messageContent, timeRecieve)
+		messageResponse := fmt.Sprintf(" %s", messageContent)
 
 		for _, client := range clients {
 			client.WriteMessage(messageType, []byte(messageResponse))

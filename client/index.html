@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat with File Upload</title>
+  <style>
+    /* Styling remains the same */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #chat {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+    #messages {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    .message {
+      margin: 5px 0;
+    }
+    #input-form {
+      display: flex;
+      margin-top: 10px;
+    }
+    #message-input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    #send-button {
+      padding: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <h1>WebSocket Chat</h1>
+    <div id="messages"></div>    
+
+    <form id="input-form">
+      <input type="text" id="message-input" placeholder="Enter your message" autocomplete="off" />
+      <button id="send-button">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');    
+    const form = document.getElementById('input-form');
+
+    // Connect to WebSocket server
+    const ws = new WebSocket('ws://localhost:3000');    
+    ws.onmessage = (event) => {
+  // Check if the message is a Blob (binary data)
+  if (event.data instanceof Blob) {
+    // If it's a Blob, convert it to text
+    const reader = new FileReader();    
+    reader.onload = function() {
+      // Once the file is read, display the result (which will be text)
+      const newMessage = document.createElement('div');
+      newMessage.classList.add('message');
+      newMessage.textContent = reader.result; // This will contain the actual text
+      messagesDiv.appendChild(newMessage);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Scroll to the bottom
+    };
+
+    reader.readAsText(event.data);  // Read Blob as text
+  } else {    
+    const newMessage = document.createElement('div');
+    newMessage.classList.add('message');
+    newMessage.textContent = event.data;  // This should display the text
+    messagesDiv.appendChild(newMessage);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+};
+    // Handle form submission for text messages
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = messageInput.value;
+      if (message) {
+        ws.send(message);
+        messageInput.value = '';
+      }
+    });
+
+  </script>
+</body>
+</html>
