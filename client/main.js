@@ -6,7 +6,7 @@ const username = document.getElementById("username");
 const form = document.getElementById("input-form");
 
 // Connect to WebSocket server
-const ws = new WebSocket("ws://localhost:3000");
+const ws = new WebSocket("wss://gochat-av01.onrender.com/ws");
 
 // Handle form submission for text messages
 form.addEventListener("submit", (e) => {

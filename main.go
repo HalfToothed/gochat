@@ -16,17 +16,20 @@ type Input struct {
 	Text string
 }
 
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
 func main() {
 
-	upgrader := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
+	fs := http.FileServer(http.Dir("./client"))
+	http.Handle("/", fs)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 
 		websocket, err := upgrader.Upgrade(w, r, nil)
 
@@ -40,7 +43,7 @@ func main() {
 
 	})
 
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
 func listen(conn *websocket.Conn) {
