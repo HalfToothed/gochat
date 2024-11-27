@@ -6,14 +6,23 @@ const username = document.getElementById("username");
 const form = document.getElementById("input-form");
 
 // Connect to WebSocket server
-const ws = new WebSocket("wss://gochat-av01.onrender.com/ws");
+
+const ws = new WebSocket("ws://localhost:8080/ws");
+
+ws.onerror = () =>{
+  alert("We got some error, Reload the window");
+}
+
+ws.onclose = () => {
+  alert("Connection failed, Reload the window");
+}
 
 // Handle form submission for text messages
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if(!username.value || username.value.trim() === ""){
-    alert("Enter Username");
+    alert("Enter Username")
     return;
   }
 
@@ -26,10 +35,16 @@ form.addEventListener("submit", (e) => {
 
   let message = JSON.stringify(Input);
 
-  if (message) {
-    ws.send(message);
-    messageInput.value = "";
+  try{
+    if (message) {
+      ws.send(message);
+      messageInput.value = "";
+    }
   }
+  catch{
+    alert("Something went wrong");
+  }
+ 
 });
 
 ws.onmessage = (event) => {
