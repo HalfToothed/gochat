@@ -1,29 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/react.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GoChat</title>
-    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="chat">
-      <h1>Go Chat</h1>
-      <div>
-        <input type="text" id="username" placeholder="Enter Username" autocomplete="off"/>
-      </div>
-      <div id="messages"></div>
-
-      <form id="input-form">
-        <input
-          type="text"
-          id="message-input"
-          placeholder="Enter your message"
-          autocomplete="off"
-        />
-        <button id="send-button">Send</button>
-      </form>
-    </div>
-    <script src="main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
