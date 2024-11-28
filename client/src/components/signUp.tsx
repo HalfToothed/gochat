@@ -13,7 +13,7 @@ const SignUp: React.FC = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${api}`+"/signup", { email, username, password });
+      const response = await axios.post(`${api}`+"/signUp", { email, username, password });
       if (response.status === 201) {
         alert("Sign-up successful!");
         navigate("/");

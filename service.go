@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type User struct {
+type Auth struct {
 	Email    string `json:"Email"`
 	Username string `json:"Username"`
 	Password string `json:"Password"`
@@ -14,24 +14,24 @@ type User struct {
 
 func signIn(c *gin.Context) {
 
-	var userInput User
-	var storedUser User
+	var userInput Auth
+	var storedUser Auth
 
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Find user by username
-	result := db.Where("username = ?", userInput.Username).First(&storedUser)
+	// Find user by email
+	result := db.Where("email = ?", userInput.Email).First(&storedUser)
 	if result.Error != nil {
-		c.JSON(401, gin.H{"error": "Invalid username or password"})
+		c.JSON(401, gin.H{"error": "Invalid email or password"})
 		return
 	}
 
 	// Verify password
 	if userInput.Password != storedUser.Password {
-		c.JSON(401, gin.H{"error": "Invalid username or password"})
+		c.JSON(401, gin.H{"error": "Invalid email or password"})
 		return
 	}
 
@@ -41,7 +41,7 @@ func signIn(c *gin.Context) {
 
 func signUp(c *gin.Context) {
 
-	var newUser User
+	var newUser Auth
 
 	if err := c.ShouldBindJSON(&newUser); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -57,5 +57,15 @@ func signUp(c *gin.Context) {
 }
 
 func getAllUser(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, "")
+
+	var usernames []string
+
+	// Query only the 'Username' column and scan results into the 'usernames' slice
+	result := db.Model(&Auth{}).Pluck("Username", &usernames)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+	}
+
+	c.JSON(http.StatusOK, usernames)
+
 }

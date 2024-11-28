@@ -33,9 +33,9 @@ func main() {
 
 	router := gin.Default()
 	router.Use(cors.Default())
-	router.POST("/sign-in", signIn)
-	router.POST("/sign-up", signUp)
-	router.POST("/getAllUser", getAllUser)
+	router.POST("/signIn", signIn)
+	router.POST("/signUp", signUp)
+	router.GET("/getAllUsers", getAllUser)
 
 	go router.Run("localhost:3000")
 

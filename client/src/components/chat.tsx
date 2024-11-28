@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
 import ChatBox from "./chatbox";
 import useWebSocket from "../hooks/websocket";
 
 const Chat: React.FC = () => {
 
-    const socket = import.meta.env.VITE_WEBSOCKET;
+  const api = import.meta.env.VITE_API;
+  const socket = import.meta.env.VITE_WEBSOCKET;
 
   const [selectedUser, setSelectedUser] = useState<string>("");
+  const [users, setUsers] = useState<string[]>([]);
   const { messages, sendMessage, isConnected } = useWebSocket(socket);
 
-  const users = ["Alice", "Bob", "Charlie", "David"]; // Replace with actual user data
+   // Fetch users on component mount
+   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${api}` + '/getAllUsers'); 
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+        } else {
+          console.error('Error fetching users:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Request failed:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
