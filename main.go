@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 var clients []*websocket.Conn
@@ -26,10 +26,20 @@ var upgrader = websocket.Upgrader{
 
 func main() {
 
-	fs := http.FileServer(http.Dir("./client"))
-	http.Handle("/", fs)
+	// fs := http.FileServer(http.Dir("./client"))
+	// http.Handle("/", fs)
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	initDatabase()
+
+	router := gin.Default()
+	router.Use(cors.Default())
+	router.POST("/sign-in", signIn)
+	router.POST("/sign-up", signUp)
+	router.POST("/getAllUser", getAllUser)
+
+	go router.Run("localhost:3000")
+
+	go http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 
 		websocket, err := upgrader.Upgrade(w, r, nil)
 
@@ -40,43 +50,7 @@ func main() {
 
 		log.Println("Websocket Connected!")
 		listen(websocket)
-
 	})
 
 	http.ListenAndServe(":8080", nil)
-}
-
-func listen(conn *websocket.Conn) {
-
-	clients = append(clients, conn)
-
-	for {
-
-		messageType, messageContent, err := conn.ReadMessage()
-
-		if err != nil {
-			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-				removeClient(conn)
-			}
-			log.Println(err)
-			return
-		}
-
-		var content Input
-		json.Unmarshal([]byte(messageContent), &content)
-
-		messageResponse := fmt.Sprintf("%s: %s", content.User, content.Text)
-
-		for _, client := range clients {
-			client.WriteMessage(messageType, []byte(messageResponse))
-		}
-	}
-}
-
-func removeClient(client *websocket.Conn) {
-	for i, v := range clients {
-		if v == client {
-			clients = append(clients[:i], clients[i+1:]...)
-		}
-	}
 }
