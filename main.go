@@ -30,7 +30,7 @@ func main() {
 	router.Use(cors.Default())
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
-	router.GET("/getAllUsers", getAllUser)
+	router.GET("/getAllUsers/:username", getAllUser)
 
 	go router.Run("localhost:3000")
 

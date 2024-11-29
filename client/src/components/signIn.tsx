@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -14,8 +15,8 @@ const SignIn: React.FC = () => {
     try {
       const response = await axios.post(`${api}` + "/signIn", { email, password });
       if (response.status === 200) {
-        navigate("/chat");
-      } else {
+        navigate("/chat", { state: response.data.username }); // Pass to chat via state
+      }  else {
         alert("Invalid credentials");
       }
     } catch (error) {
@@ -30,7 +31,7 @@ const SignIn: React.FC = () => {
       <form onSubmit={handleSignIn}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required

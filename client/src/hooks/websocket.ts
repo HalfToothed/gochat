@@ -8,10 +8,21 @@ const useWebSocket = (url: string) => {
   useEffect(() => {
     ws.current = new WebSocket(url);
 
-    ws.current.onopen = () => setIsConnected(true);
-    ws.current.onmessage = (event) => {
-      setMessages((prev) => [...prev, event.data]);
+    ws.current.onopen = () => {
+      console.log("WebSocket connection established");
+      setIsConnected(true);
     };
+
+   ws.current.onmessage = (event) => {
+    console.log("Message received:", event.data);
+    try {
+          const data = JSON.parse(event.data); // Parse message if it's JSON
+          setMessages((prev) => [...prev, `${data.Sender}: ${data.Text}`]);
+        } catch (error) {
+          console.error("Error parsing message:", error, event.data);
+        }
+    };
+
     ws.current.onclose = () => setIsConnected(false);
     ws.current.onerror = (error) => console.error("WebSocket Error:", error);
 
@@ -20,7 +31,6 @@ const useWebSocket = (url: string) => {
 
   const sendMessage = (message: string) => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      console.log("sdfjas;lkfjasl;dfjask")
       ws.current.send(message);
     }
   };

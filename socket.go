@@ -9,9 +9,9 @@ import (
 )
 
 type Input struct {
-	Receiver string
-	Sender   string
-	Text     string
+	Sender string `json:"Sender"`
+	Target string `json:"Target"`
+	Text   string `json:"Text"`
 }
 
 func listen(conn *websocket.Conn) {
@@ -36,9 +36,9 @@ func listen(conn *websocket.Conn) {
 		}
 
 		// Check if the receiver exists in the clientsMap
-		receiverConn, exists := clientsMap[content.Receiver]
+		receiverConn, exists := clientsMap[content.Target]
 		if !exists {
-			log.Println("Receiver not found:", content.Receiver)
+			log.Println("Receiver not found:", content.Target)
 			continue
 		}
 

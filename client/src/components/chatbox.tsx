@@ -1,10 +1,12 @@
 import { useState } from "react";
 
 export default function ChatBox({
+  sender,
   selectedUser,
   messages,
   onSendMessage,
 }: {
+  sender: string
   selectedUser: string;
   messages: string[];
   onSendMessage: (message: string) => void;
@@ -13,7 +15,7 @@ export default function ChatBox({
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      onSendMessage(JSON.stringify({ User: selectedUser, Text: message }));
+      onSendMessage(JSON.stringify({ Sender: sender, Target: selectedUser, Text: message }));
       setMessage("");
     }
   };

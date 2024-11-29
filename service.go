@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +12,6 @@ type Auth struct {
 	Username string `json:"Username"`
 	Password string `json:"Password"`
 }
-
-var currentUser string
 
 func signIn(c *gin.Context) {
 
@@ -37,10 +36,8 @@ func signIn(c *gin.Context) {
 		return
 	}
 
-	currentUser = storedUser.Username
-
 	// Return success response
-	c.JSON(200, gin.H{"message": "Login successful", "user": storedUser.Username})
+	c.JSON(200, gin.H{"message": "Login successful", "username": storedUser.Username})
 }
 
 func signUp(c *gin.Context) {
@@ -64,8 +61,15 @@ func getAllUser(c *gin.Context) {
 
 	var usernames []string
 
+	username := c.Param("username")
+	if username == "" {
+		log.Println("Username not provided")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Username not provided"})
+		return
+	}
+
 	// Query only the 'Username' column and scan results into the 'usernames' slice
-	result := db.Model(&Auth{}).Where("username != ?", currentUser).Pluck("Username", &usernames)
+	result := db.Model(&Auth{}).Where("username != ?", username).Pluck("Username", &usernames)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 	}
