@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-interface ChatBoxProps {
+export default function ChatBox({
+  selectedUser,
+  messages,
+  onSendMessage,
+}: {
   selectedUser: string;
   messages: string[];
   onSendMessage: (message: string) => void;
-}
-
-const ChatBox: React.FC<ChatBoxProps> = ({ selectedUser, messages, onSendMessage }) => {
-  const [message, setMessage] = useState<string>("");
+}) {
+  const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      onSendMessage(JSON.stringify({ to: selectedUser, message }));
+      onSendMessage(JSON.stringify({ User: selectedUser, Text: message }));
       setMessage("");
     }
   };
@@ -42,6 +44,4 @@ const ChatBox: React.FC<ChatBoxProps> = ({ selectedUser, messages, onSendMessage
       <button onClick={handleSendMessage}>Send</button>
     </div>
   );
-};
-
-export default ChatBox;
+}

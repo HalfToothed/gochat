@@ -12,6 +12,8 @@ type Auth struct {
 	Password string `json:"Password"`
 }
 
+var currentUser string
+
 func signIn(c *gin.Context) {
 
 	var userInput Auth
@@ -34,6 +36,8 @@ func signIn(c *gin.Context) {
 		c.JSON(401, gin.H{"error": "Invalid email or password"})
 		return
 	}
+
+	currentUser = storedUser.Username
 
 	// Return success response
 	c.JSON(200, gin.H{"message": "Login successful", "user": storedUser.Username})
@@ -61,11 +65,10 @@ func getAllUser(c *gin.Context) {
 	var usernames []string
 
 	// Query only the 'Username' column and scan results into the 'usernames' slice
-	result := db.Model(&Auth{}).Pluck("Username", &usernames)
+	result := db.Model(&Auth{}).Where("username != ?", currentUser).Pluck("Username", &usernames)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 	}
 
 	c.JSON(http.StatusOK, usernames)
-
 }

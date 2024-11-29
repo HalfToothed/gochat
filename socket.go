@@ -8,9 +8,13 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func listen(conn *websocket.Conn) {
+type Input struct {
+	Receiver string
+	Sender   string
+	Text     string
+}
 
-	clients = append(clients, conn)
+func listen(conn *websocket.Conn) {
 
 	for {
 
@@ -25,20 +29,34 @@ func listen(conn *websocket.Conn) {
 		}
 
 		var content Input
-		json.Unmarshal([]byte(messageContent), &content)
+		err = json.Unmarshal(messageContent, &content)
+		if err != nil {
+			log.Println("Error unmarshalling message:", err)
+			continue
+		}
 
-		messageResponse := fmt.Sprintf("%s: %s", content.User, content.Text)
+		// Check if the receiver exists in the clientsMap
+		receiverConn, exists := clientsMap[content.Receiver]
+		if !exists {
+			log.Println("Receiver not found:", content.Receiver)
+			continue
+		}
 
-		for _, client := range clients {
-			client.WriteMessage(messageType, []byte(messageResponse))
+		// Send the message to the receiver
+		messageResponse := fmt.Sprintf("%s: %s", content.Sender, content.Text)
+		err = receiverConn.WriteMessage(messageType, []byte(messageResponse))
+		if err != nil {
+			log.Println("Error sending message to receiver:", err)
 		}
 	}
 }
 
 func removeClient(client *websocket.Conn) {
-	for i, v := range clients {
-		if v == client {
-			clients = append(clients[:i], clients[i+1:]...)
+	// Remove the client from the clients map
+	for username, conn := range clientsMap {
+		if conn == client {
+			delete(clientsMap, username)
+			return
 		}
 	}
 }

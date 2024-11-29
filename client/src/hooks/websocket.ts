@@ -20,6 +20,7 @@ const useWebSocket = (url: string) => {
 
   const sendMessage = (message: string) => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      console.log("sdfjas;lkfjasl;dfjask")
       ws.current.send(message);
     }
   };

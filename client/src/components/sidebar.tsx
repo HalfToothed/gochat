@@ -1,16 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-interface SidebarProps {
-  users: string[];
-  onSelectUser: (username: string) => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ users, onSelectUser }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const filteredUsers = users.filter((user) =>
-    user.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+export default function Sidebar({ users, onSelectUser }: { users: string[]; onSelectUser: (username: string) => void }) {
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div style={{ width: "250px", borderRight: "1px solid #ddd" }}>
@@ -22,18 +13,18 @@ const Sidebar: React.FC<SidebarProps> = ({ users, onSelectUser }) => {
         style={{ width: "100%", padding: "5px" }}
       />
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {filteredUsers.map((user, index) => (
-          <li
-            key={index}
-            style={{ cursor: "pointer", padding: "10px" }}
-            onClick={() => onSelectUser(user)}
-          >
-            {user}
-          </li>
-        ))}
+        {users
+          .filter((user) => user.toLowerCase().includes(searchTerm.toLowerCase()))
+          .map((user, index) => (
+            <li
+              key={index}
+              style={{ cursor: "pointer", padding: "10px" }}
+              onClick={() => onSelectUser(user)}
+            >
+              {user}
+            </li>
+          ))}
       </ul>
     </div>
   );
-};
-
-export default Sidebar;
+}
