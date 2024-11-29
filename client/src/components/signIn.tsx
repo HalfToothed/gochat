@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/signIn.css";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -26,29 +27,29 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="signin-container">
+    <form className="signin-form" onSubmit={handleSignIn}>
       <h2>Sign In</h2>
-      <form onSubmit={handleSignIn}>
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Sign In</button>
-      </form>
+      <input
+        type="text"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Sign In</button>
       <p>
         Don't have an account? <a href="/signup">Sign Up</a>
       </p>
-    </div>
+    </form>
+  </div>
   );
 };
 

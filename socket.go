@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/gorilla/websocket"
@@ -11,6 +10,11 @@ import (
 type Input struct {
 	Sender string `json:"Sender"`
 	Target string `json:"Target"`
+	Text   string `json:"Text"`
+}
+
+type Response struct {
+	Sender string `json:"Sender"`
 	Text   string `json:"Text"`
 }
 
@@ -42,9 +46,19 @@ func listen(conn *websocket.Conn) {
 			continue
 		}
 
+		message := Response{
+			Sender: content.Sender,
+			Text:   content.Text,
+		}
+
+		messageJSON, err := json.Marshal(message)
+		if err != nil {
+			log.Println("Error marshaling message:", err)
+			return
+		}
+
 		// Send the message to the receiver
-		messageResponse := fmt.Sprintf("%s: %s", content.Sender, content.Text)
-		err = receiverConn.WriteMessage(messageType, []byte(messageResponse))
+		err = receiverConn.WriteMessage(messageType, messageJSON)
 		if err != nil {
 			log.Println("Error sending message to receiver:", err)
 		}

@@ -1,0 +1,76 @@
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+  position: fixed; /* Use fixed positioning to keep it at the bottom */
+  bottom: 5px; /* Adjust bottom spacing */
+  left: 50%; 
+  transform: translateX(-50%); /* Offset the 50% left position to truly center */
+  width: 70vw;
+  padding: 15px 20px; /* Reduced padding */
+  background-color: #2b2b2b;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-sizing: border-box; /* Ensure padding is inside the width */
+}
+
+.input {
+  flex-grow: 0.2;
+  padding: 18px 30px;
+  border-radius: 15px;
+  background-color: #0f0f0f;
+  color: #dcdcdc;
+  border: none;
+  font-size: 20px; /* Slightly smaller font */
+  width: 70%; /* Ensure it fills the available space */
+}
+
+.input:focus {
+  background-color: #101010;
+}
+
+.send-button {
+  background-color: #ffffff;
+  border: none;
+  color: #000000;
+  padding: 18px 30px;
+  margin-left: 10px;
+  border-radius: 20%;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+  background-color: #949494;
+}
+
+.send-button:active {
+  transform: scale(0.95);
+}
+
+.emoji-picker,
+.voice-message,
+.attachment {
+  margin-left: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #dcdcdc;
+}
+
+.emoji-picker:hover,
+.voice-message:hover,
+.attachment:hover {
+  color: #4f86f4;
+}
+
+.emoji-picker {
+  font-size: 22px;
+}
+
+.voice-message {
+  font-size: 22px;
+}
+
+.attachment {
+  font-size: 18px;
+}

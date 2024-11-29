@@ -1,0 +1,99 @@
+/* SignUp Styles */
+  
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(34, 34, 34, 0.9));
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); */
+  }
+  
+  .signup-container > * {
+    position: relative;
+    z-index: 2; /* Ensure the content appears above the frosted effect */
+    text-align: center;
+    max-width: 600px; /* Max width for form */
+    width: 100%; /* Ensure it is responsive */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8); /* Slightly opaque background for the form */
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .signup-container {
+      padding: 10px;
+    }
+  }
+  
+  .signup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better contrast */
+  }
+  
+  .signup-form {
+    background: rgba(255, 255, 255, 0.9); /* Light form background */
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #333;
+    z-index: 2; /* Ensure it is on top of the overlay */
+  }
+  
+  .signup-form h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .signup-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    color: #333;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  .signup-form input:focus {
+    border-color: #000000;
+  }
+  
+  .signup-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #333c42;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-form button:hover {
+    background-color: #101213;
+  }
+  
+  .signup-form p {
+    margin-top: 1rem;
+    color: #666;
+  }
+  

@@ -14,10 +14,8 @@ const useWebSocket = (url: string) => {
     };
 
    ws.current.onmessage = (event) => {
-    console.log("Message received:", event.data);
     try {
-          const data = JSON.parse(event.data); // Parse message if it's JSON
-          setMessages((prev) => [...prev, `${data.Sender}: ${data.Text}`]);
+          setMessages((prev) => [...prev, `${event.data}`]);
         } catch (error) {
           console.error("Error parsing message:", error, event.data);
         }

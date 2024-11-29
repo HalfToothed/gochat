@@ -1,42 +1,48 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Reset some basic styles for consistency */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Body Styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(34, 34, 34, 0.9));
+    background-size: cover;
+  color: #dcdcdc;  /* Light gray text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;  /* Ensures full viewport height */
+  overflow: hidden;   /* Prevents overflow from affecting layout */
+  line-height: 1.5;    /* Improves readability */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-.card {
-  padding: 2em;
+/* Base styles */
+a {
+  text-decoration: none;
 }
 
-.read-the-docs {
-  color: #888;
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+/* Apply smooth transition to all hover effects */
+*,
+*::before,
+*::after {
+  transition: all 0.3s ease;
 }

@@ -3,6 +3,7 @@ import Sidebar from "./sidebar";
 import ChatBox from "./chatbox";
 import useWebSocket from "../hooks/websocket";
 import { useLocation } from "react-router-dom";
+import "../styles/chat.css"
 
 export default function Chat() {
 
@@ -36,18 +37,20 @@ export default function Chat() {
   }, []);
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Sidebar users={users} onSelectUser={setSelectedUser} />
-      {selectedUser ? (
-        <ChatBox sender = {username} selectedUser={selectedUser} messages={messages} onSendMessage={sendMessage} />
-      ) : (
-        <div style={{ flex: 1, padding: "20px" }}>
-          <h2>Select a user to start chatting</h2>
-        </div>
-      )}
-      {!isConnected && (
-        <div style={{ position: "fixed", bottom: 10, right: 10 }}>Reconnecting...</div>
-      )}
-    </div>
+    <div className="chat-container">
+    <Sidebar users={users} onSelectUser={setSelectedUser} />
+    {selectedUser ? (
+      <ChatBox sender={username} selectedUser={selectedUser} messages={messages} onSendMessage={sendMessage} />
+    ) : (
+      <div className="chatbox">
+        <h2>Select a user to start chatting</h2>
+      </div>
+    )}
+    {!isConnected && (
+      <div className="reconnecting-message">
+        <i className="fa fa-spinner fa-spin"></i> Reconnecting...
+      </div>
+    )}
+  </div>
   );
 }
