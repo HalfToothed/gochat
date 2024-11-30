@@ -48,23 +48,28 @@ export default function Chat() {
   useEffect(() => {
     messages.forEach((rawMessage) => {
       try {
-        const parsedMessage: Message = rawMessage;
 
-        console.log("@@@@@@@@@@@@@@@@@@@@",parsedMessage);
+        const parsedMessage: Message = JSON.parse(rawMessage);
 
-
-        // Determine the conversation key (user involved)
         const chatUser =
-          parsedMessage.Sender === username
+          parsedMessage.Sender == username
             ? parsedMessage.Target // Outgoing
             : parsedMessage.Sender; // Incoming
 
-        setChats((prevChats) => ({
-          ...prevChats,
-          [chatUser]: [...(prevChats[chatUser] || []), parsedMessage],
-        }));
+            setChats((prevChats) => {
+              // Ensure the chatUser exists or initialize it as an empty array
+              const updatedChats = { ...prevChats };
+            
+              // If the chatUser doesn't exist in updatedChats, initialize it as an empty array
+              if (!updatedChats[chatUser]) {
+                updatedChats[chatUser] = [];
+              }
+            
+              // Now append the parsedMessage to the chatUser's array
+              updatedChats[chatUser].push(parsedMessage);
 
-        console.log("%%%%%%%%%%%%%",chats)
+              return updatedChats;
+            });
 
       } catch (error) {
         console.error("Error parsing message:", error);
@@ -85,9 +90,6 @@ export default function Chat() {
       ...prevChats,
       [selectedUser]: [...(prevChats[selectedUser] || []), newMessage],
     }));
-
-    
-
   };
 
 
