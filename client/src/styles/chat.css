@@ -33,9 +33,25 @@
     font-size: 20px;
     color: #000000  ;
     font-family:Georgia, 'Times New Roman', Times, serif;
-    background-color:rgb(99, 106, 113);
+    background: #eeeeee;
   }
   
+  .message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .message.incoming {
+    background-color: #f1f0f0;
+    align-self: flex-start;
+  }
+  .message.outgoing {
+    background-color: #0084ff;
+    color: white;
+    align-self: flex-end;
+  }
+  
+
   .message .sender {
     font-weight: bold;
   }
@@ -70,10 +86,27 @@
     object-fit: cover;
   }
   
-  .chat-box-container h2 {
+  /* .chat-box-container h2 {
     color: #fff;
     font-size: 20px;
     margin-bottom: 10px;
     margin-left: 10px;
+  }*/
+
+
+  .chatbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Occupies the full container height */ 
+    color: #ffffff; /* Subtle text color for a modern look */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Professional font */
+    font-size: 1.5rem; /* Slightly larger font for better visibility */
+    font-weight: 500; /* Semi-bold for emphasis */
+    text-align: center; /* Center-align text */
+    padding: 20px; /* Add space around the text */
+    border: none; /* Remove any border for simplicity */
+    border-radius: 0; /* Keep the edges square */
   }
+  
   

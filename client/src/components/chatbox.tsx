@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/chatbox.css";
 
 
@@ -20,6 +20,14 @@ export default function ChatBox({
   onSendMessage: (message: string) => void;
 }) {
   const [message, setMessage] = useState("");
+  const messageContainerRef = useRef<HTMLDivElement | null>(null);
+
+    // Automatically scroll to the bottom when messages change
+    useEffect(() => {
+      if (messageContainerRef.current) {
+        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+      }
+    }, [messages]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -30,8 +38,10 @@ export default function ChatBox({
 
   return (
     <div className="chat-box-container">
-      <h2>Chat with {selectedUser}</h2>
-      <div className="message-container">
+      <div className="chat-header">
+        <span>💬 {selectedUser}</span>
+      </div>
+      <div className="message-container" ref={messageContainerRef}>
         {messages.map((msg, index) => (
           <div
             key={index}

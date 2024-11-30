@@ -3,7 +3,7 @@ import Sidebar from "./sidebar";
 import ChatBox from "./chatbox";
 import useWebSocket from "../hooks/websocket";
 import { useLocation } from "react-router-dom";
-import "../styles/chat.css"
+import "../styles/chat.css";
 
 type Message = {
   Sender: string;
@@ -12,7 +12,6 @@ type Message = {
 };
 
 export default function Chat() {
-
   const location = useLocation();
   const username = location.state || "";
 
@@ -22,7 +21,8 @@ export default function Chat() {
   const [selectedUser, setSelectedUser] = useState("");
   const [users, setUsers] = useState<string[]>([]);
   const [chats, setChats] = useState<Record<string, Message[]>>({});
-  const { messages, sendMessage, isConnected } = useWebSocket(socketUrl + `${username}`);
+  const [processedMessages, setProcessedMessages] = useState<Set<string>>(new Set());
+  const { messages, sendMessage, isConnected } = useWebSocket(`${socketUrl}${username}`);
 
   // Fetch users on component mount
   useEffect(() => {
@@ -43,39 +43,33 @@ export default function Chat() {
     fetchUsers();
   }, [api, username]);
 
-
-  // Handle incoming WebSocket messages
+  // Process new messages
   useEffect(() => {
-    messages.forEach((rawMessage) => {
-      try {
+    const newMessages = messages.filter((rawMessage) => !processedMessages.has(rawMessage));
 
+    if (newMessages.length === 0) return;
+
+    newMessages.forEach((rawMessage) => {
+      try {
         const parsedMessage: Message = JSON.parse(rawMessage);
 
         const chatUser =
-          parsedMessage.Sender == username
+          parsedMessage.Sender === username
             ? parsedMessage.Target // Outgoing
             : parsedMessage.Sender; // Incoming
 
-            setChats((prevChats) => {
-              // Ensure the chatUser exists or initialize it as an empty array
-              const updatedChats = { ...prevChats };
-            
-              // If the chatUser doesn't exist in updatedChats, initialize it as an empty array
-              if (!updatedChats[chatUser]) {
-                updatedChats[chatUser] = [];
-              }
-            
-              // Now append the parsedMessage to the chatUser's array
-              updatedChats[chatUser].push(parsedMessage);
+        setChats((prevChats) => ({
+          ...prevChats,
+          [chatUser]: [...(prevChats[chatUser] || []), parsedMessage],
+        }));
 
-              return updatedChats;
-            });
-
+        // Add the message to the processed set
+        setProcessedMessages((prevSet) => new Set(prevSet).add(rawMessage));
       } catch (error) {
         console.error("Error parsing message:", error);
       }
     });
-  }, [messages, username]);
+  }, [messages, username, processedMessages]);
 
   // Send a message to the selected user
   const handleSendMessage = (text: string) => {
@@ -92,7 +86,6 @@ export default function Chat() {
     }));
   };
 
-
   return (
     <div className="chat-container">
       <Sidebar users={users} onSelectUser={setSelectedUser} />
@@ -100,7 +93,7 @@ export default function Chat() {
         <ChatBox
           sender={username}
           selectedUser={selectedUser}
-          messages={chats[selectedUser] || []} 
+          messages={chats[selectedUser] || []}
           onSendMessage={handleSendMessage}
         />
       ) : (

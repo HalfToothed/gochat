@@ -13,9 +13,9 @@
     padding: 18px;
     margin-bottom: 15px;
     border-radius: 10px;
-    border: 1px solid #3e3e3e;
-    background-color: #000000;
-    color: #dcdcdc;
+    border: 1px solid #000000;
+    background-color: #bbbbbb;
+    color: #000000;
     font-size: 18px;
   }
   
@@ -33,21 +33,28 @@
     align-items: center;
     padding: 12px;
     font-size: 18px;
-    background-color: #9f9f9f;
-    color: #000000;
+    background-color: #3f3f3f;
+    color: #ffffff;
     margin: 8px 0;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
+
+  .sidebar .selected-user {
+    background-color: #000000; /* Highlight color */
+    color: rgb(255, 255, 255); /* Text color for contrast */
+    font-weight: bold;
+  }
   
-  .sidebar li:hover {
-    background-color: #ffffff;
+  .sidebar li:hover { 
+    transform: translateY(-2px);
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
   }
   
   .sidebar li.active {
     background-color: #5b5b5b;
-    box-shadow: 0 0 10px rgba(79, 134, 244, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
 

@@ -33,7 +33,7 @@
   background-color: #ffffff;
   border: none;
   color: #000000;
-  padding: 18px 30px;
+  padding: 14px 24px;
   margin-left: 10px;
   border-radius: 20%;
   font-size: 20px;
@@ -73,4 +73,20 @@
 
 .attachment {
   font-size: 18px;
+}
+
+.chat-header {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #ffffff; /* A calming blue */
+  padding: 15px 0 15px 20px;
+  background-color: #101011;;
+  text-transform: capitalize;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.message-container {
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
 }
