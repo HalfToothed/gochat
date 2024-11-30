@@ -1,5 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../styles/chatbox.css";
+
+
+type Message = {
+  Sender: string;
+  Target: string;
+  Text: string;
+};
 
 export default function ChatBox({
   sender,
@@ -9,37 +16,15 @@ export default function ChatBox({
 }: {
   sender: string;
   selectedUser: string;
-  messages: string[];
+  messages: Message[];
   onSendMessage: (message: string) => void;
 }) {
-  const [message, setMessage] = useState(""); // State to store the current message
-  const [parsedMessages, setParsedMessages] = useState<{ Sender: string; Text: string }[]>([]);
-
-  // Parse incoming messages when they arrive
-  useEffect(() => {
-    const newParsedMessages = messages.map((msg) => {
-      try {
-        return JSON.parse(msg); // Parse the JSON message
-      } catch (error) {
-        console.error("Error parsing message:", error);
-        return { Sender: "Unknown", Text: msg }; // If parsing fails, return a fallback
-      }
-    });
-
-    // Append the new parsed messages to the existing ones
-    setParsedMessages((prevMessages) => [...prevMessages, ...newParsedMessages]);
-  }, [messages]); // Re-run effect whenever `messages` changes
+  const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      const newMessage = { Sender: sender, Text: message };
-
-      // Add the message to the UI immediately
-      setParsedMessages((prevMessages) => [...prevMessages, newMessage]);
-
-      // Send the message via WebSocket
-      onSendMessage(JSON.stringify({ Sender: sender, Target: selectedUser, Text: message }));
-      setMessage("");
+      onSendMessage(message.trim());
+      setMessage(""); // Clear the input after sending
     }
   };
 
@@ -47,10 +32,12 @@ export default function ChatBox({
     <div className="chat-box-container">
       <h2>Chat with {selectedUser}</h2>
       <div className="message-container">
-        {parsedMessages.map((msg, index) => (
-          <div key={index} className="message">
-            <strong className="sender">{msg.Sender}</strong>:{" "}
-            <span className="text">{msg.Text}</span>
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message ${msg.Sender === sender ? "sent" : "received"}`}
+          >
+            <strong>{msg.Sender === sender ? "Me" : msg.Sender}</strong>: {msg.Text}
           </div>
         ))}
       </div>

@@ -5,6 +5,12 @@ import useWebSocket from "../hooks/websocket";
 import { useLocation } from "react-router-dom";
 import "../styles/chat.css"
 
+type Message = {
+  Sender: string;
+  Target: string;
+  Text: string;
+};
+
 export default function Chat() {
 
   const location = useLocation();
@@ -15,6 +21,7 @@ export default function Chat() {
 
   const [selectedUser, setSelectedUser] = useState("");
   const [users, setUsers] = useState<string[]>([]);
+  const [chats, setChats] = useState<Record<string, Message[]>>({});
   const { messages, sendMessage, isConnected } = useWebSocket(socketUrl + `${username}`);
 
   // Fetch users on component mount
@@ -34,23 +41,76 @@ export default function Chat() {
     };
 
     fetchUsers();
-  }, []);
+  }, [api, username]);
+
+
+  // Handle incoming WebSocket messages
+  useEffect(() => {
+    messages.forEach((rawMessage) => {
+      try {
+        const parsedMessage: Message = rawMessage;
+
+        console.log("@@@@@@@@@@@@@@@@@@@@",parsedMessage);
+
+
+        // Determine the conversation key (user involved)
+        const chatUser =
+          parsedMessage.Sender === username
+            ? parsedMessage.Target // Outgoing
+            : parsedMessage.Sender; // Incoming
+
+        setChats((prevChats) => ({
+          ...prevChats,
+          [chatUser]: [...(prevChats[chatUser] || []), parsedMessage],
+        }));
+
+        console.log("%%%%%%%%%%%%%",chats)
+
+      } catch (error) {
+        console.error("Error parsing message:", error);
+      }
+    });
+  }, [messages, username]);
+
+  // Send a message to the selected user
+  const handleSendMessage = (text: string) => {
+    if (!selectedUser) return;
+
+    const newMessage: Message = { Sender: username, Target: selectedUser, Text: text };
+
+    sendMessage(JSON.stringify(newMessage));
+
+    // Optimistically update the chat
+    setChats((prevChats) => ({
+      ...prevChats,
+      [selectedUser]: [...(prevChats[selectedUser] || []), newMessage],
+    }));
+
+    
+
+  };
+
 
   return (
     <div className="chat-container">
-    <Sidebar users={users} onSelectUser={setSelectedUser} />
-    {selectedUser ? (
-      <ChatBox sender={username} selectedUser={selectedUser} messages={messages} onSendMessage={sendMessage} />
-    ) : (
-      <div className="chatbox">
-        <h2>Select a user to start chatting</h2>
-      </div>
-    )}
-    {!isConnected && (
-      <div className="reconnecting-message">
-        <i className="fa fa-spinner fa-spin"></i> Reconnecting...
-      </div>
-    )}
-  </div>
+      <Sidebar users={users} onSelectUser={setSelectedUser} />
+      {selectedUser ? (
+        <ChatBox
+          sender={username}
+          selectedUser={selectedUser}
+          messages={chats[selectedUser] || []} 
+          onSendMessage={handleSendMessage}
+        />
+      ) : (
+        <div className="chatbox">
+          <h2>Select a user to start chatting</h2>
+        </div>
+      )}
+      {!isConnected && (
+        <div className="reconnecting-message">
+          <i className="fa fa-spinner fa-spin"></i> Reconnecting...
+        </div>
+      )}
+    </div>
   );
 }

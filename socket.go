@@ -13,11 +13,6 @@ type Input struct {
 	Text   string `json:"Text"`
 }
 
-type Response struct {
-	Sender string `json:"Sender"`
-	Text   string `json:"Text"`
-}
-
 func listen(conn *websocket.Conn) {
 
 	for {
@@ -46,12 +41,7 @@ func listen(conn *websocket.Conn) {
 			continue
 		}
 
-		message := Response{
-			Sender: content.Sender,
-			Text:   content.Text,
-		}
-
-		messageJSON, err := json.Marshal(message)
+		messageJSON, err := json.Marshal(content)
 		if err != nil {
 			log.Println("Error marshaling message:", err)
 			return

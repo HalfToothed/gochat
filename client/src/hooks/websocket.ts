@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
+type Message = {
+  Sender: string;
+  Target: string;
+  Text: string;
+};
+
 const useWebSocket = (url: string) => {
   const ws = useRef<WebSocket | null>(null);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
@@ -13,9 +19,10 @@ const useWebSocket = (url: string) => {
       setIsConnected(true);
     };
 
-   ws.current.onmessage = (event) => {
+   ws.current.onmessage = (event) => { 
     try {
-          setMessages((prev) => [...prev, `${event.data}`]);
+          const data: Message = event.data;
+          setMessages((prev) => [...prev, data]);
         } catch (error) {
           console.error("Error parsing message:", error, event.data);
         }
