@@ -3,11 +3,10 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	cors "github.com/rs/cors/wrapper/gin"
 )
 
 var upgrader = websocket.Upgrader{
@@ -38,11 +37,7 @@ func main() {
 
 	router.GET("/ws", handleWebSocket)
 
-	port := os.Getenv("PORT") // Fetch the port from environment variables
-	if port == "" {
-		port = "8080" // Default port for local development
-	}
-	if err := router.Run(":" + port); err != nil {
+	if err := router.Run(":8080"); err != nil {
 		log.Fatal("Server failed to start:", err)
 	}
 }
