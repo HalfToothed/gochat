@@ -1,21 +1,14 @@
 .input-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center horizontally */
-  position: fixed; /* Use fixed positioning to keep it at the bottom */
-  bottom: 5px; /* Adjust bottom spacing */
-  left: 50%; 
-  transform: translateX(-50%); /* Offset the 50% left position to truly center */
-  width: 70vw;
-  padding: 15px 20px; /* Reduced padding */
+  padding: 10px 15px;
   background-color: #2b2b2b;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  box-sizing: border-box; /* Ensure padding is inside the width */
 }
 
 .input {
-  flex-grow: 0.2;
+  flex-grow: 0.8;
   padding: 18px 30px;
   border-radius: 15px;
   background-color: #0f0f0f;
@@ -34,7 +27,7 @@
   border: none;
   color: #000000;
   padding: 14px 24px;
-  margin-left: 10px;
+  margin-left: 30px;
   border-radius: 20%;
   font-size: 20px;
   transition: background-color 0.3s ease;
@@ -48,33 +41,6 @@
   transform: scale(0.95);
 }
 
-.emoji-picker,
-.voice-message,
-.attachment {
-  margin-left: 15px;
-  cursor: pointer;
-  font-size: 20px;
-  color: #dcdcdc;
-}
-
-.emoji-picker:hover,
-.voice-message:hover,
-.attachment:hover {
-  color: #4f86f4;
-}
-
-.emoji-picker {
-  font-size: 22px;
-}
-
-.voice-message {
-  font-size: 22px;
-}
-
-.attachment {
-  font-size: 18px;
-}
-
 .chat-header {
   font-size: 1.7rem;
   font-weight: 600;
@@ -84,9 +50,12 @@
   text-transform: capitalize;
   border-radius: 10px;
   margin-bottom: 30px;
+  background: linear-gradient(270deg, #000000, #2e2e2e);
 }
 
 .message-container {
   -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
   scrollbar-width: none; /* Hides scrollbar in Firefox */
 }
+
+

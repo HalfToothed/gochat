@@ -88,6 +88,9 @@ export default function Chat() {
 
   return (
     <div className="chat-container">
+      <div className="username">
+          <p>{username}</p>
+      </div>
       <Sidebar users={users} onSelectUser={setSelectedUser} />
       {selectedUser ? (
         <ChatBox

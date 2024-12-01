@@ -1,6 +1,6 @@
 .chat-container {
     display: flex;
-    background: linear-gradient(270deg, #5c5c5c, #313131);
+    background: linear-gradient(90deg, #6c6c6c, #2c2c2c);
     width: 70vw;
     height: 80vh;
     border-radius: 15px;
@@ -14,85 +14,49 @@
     flex-grow: 1;
     padding: 20px;
   }
-  
+
   .message-container {
     flex-grow: 1;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding-right: 10px;
-  }
-  
-  .message {
-    display: flex;
-    margin: 10px 0;
-    padding: 12px;
-    border-radius: 15px;
-    max-width: 80%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    font-size: 20px;
-    color: #000000  ;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    background: #eeeeee;
-  }
-  
-  .message {
-    margin: 10px 0;
     padding: 10px;
-    border-radius: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
-  .message.incoming {
-    background-color: #f1f0f0;
-    align-self: flex-start;
-  }
-  .message.outgoing {
-    background-color: #0084ff;
-    color: white;
-    align-self: flex-end;
+
+  .message {
+    max-width: 75%; /* Message bubbles won't take up more than 75% of the container width */
+    padding: 8px 12px;
+    margin: 10px 0;
+    border-radius: 15px;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap; /* Ensures text respects spaces and breaks correctly */
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   
-
   .message .sender {
     font-weight: bold;
   }
   
-  .message .text {
-    font-size: 20px;
-    margin-left: 20px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
-  }
-  
-  .message.user {
-    align-self: flex-end;
-    background-color: #4f86f4; /* Light blue for user messages */
+  .sent {
+    align-self: flex-start;
+    background-color: #2b2b2b;
     color: #fff;
   }
-  
-  .message.other {
-    align-self: flex-start;
-    background-color: #991e1e; /* Soft gray for other user messages */
+
+  .received {
+    align-self: flex-end;
+    background-color: #4b4b4b;
+    color: #fff;
   }
   
   .message:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
     box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
   }
-  
-  .message .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-  }
-  
-  /* .chat-box-container h2 {
-    color: #fff;
-    font-size: 20px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-  }*/
-
 
   .chatbox {
     display: flex;
@@ -109,4 +73,55 @@
     border-radius: 0; /* Keep the edges square */
   }
   
+  .reconnecting-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fade-in-out 3s infinite;
+  }
+  
+  .reconnecting-message i {
+    font-size: 16px;
+    color: #6c757d;
+  }
+  
+  @keyframes fade-in-out {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .username {
+    position: absolute; /* Keeps it above the sidebar */
+    top: 2%; /* Slightly move it down from the top */
+    left: 80%; /* Center horizontally */
+    transform: translateX(-50%); /* Corrects the centering */
+    background: linear-gradient(90deg, #3a3a3a, #6e6e6e); /* Subtle gradient */
+    color: #ffffff; /* White text for contrast */
+    font-size: 25px; /* Smaller font size */
+    font-weight: bold;
+    text-align: center; /* Center-align the username */
+    padding: 8px 15px; /* Padding around the text */
+    border-radius: 15px; /* Rounded corners for a softer look */
+    z-index: 10; /* Ensure it sits above other elements */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .sidebar {
+    margin-top: 22px; /* Add margin to accommodate the username block */
+  }
   

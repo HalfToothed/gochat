@@ -20,8 +20,7 @@ const SignIn: React.FC = () => {
       }  else {
         alert("Invalid credentials");
       }
-    } catch (error) {
-      console.error("Error during sign-in:", error);
+    } catch (error) { 
       alert("Sign-in failed.");
     }
   };
@@ -45,6 +44,7 @@ const SignIn: React.FC = () => {
         required
       />
       <button type="submit">Sign In</button>
+      
       <p>
         Don't have an account? <a href="/signup">Sign Up</a>
       </p>

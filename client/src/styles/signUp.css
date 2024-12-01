@@ -97,3 +97,9 @@
     color: #666;
   }
   
+  .signup-form p a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  

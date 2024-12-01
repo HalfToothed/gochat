@@ -47,7 +47,7 @@ export default function ChatBox({
             key={index}
             className={`message ${msg.Sender === sender ? "sent" : "received"}`}
           >
-            <strong>{msg.Sender === sender ? "Me" : msg.Sender}</strong>: {msg.Text}
+            {msg.Text}
           </div>
         ))}
       </div>
@@ -57,6 +57,11 @@ export default function ChatBox({
           placeholder="Type a message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSendMessage();
+            }
+          }}
           className="input"
         />
         <button onClick={handleSendMessage} className="send-button">

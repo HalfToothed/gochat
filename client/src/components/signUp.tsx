@@ -16,8 +16,7 @@ const SignUp: React.FC = () => {
     try {
       const response = await axios.post(`${api}`+"/signUp", { email, username, password });
       if (response.status === 201) {
-        alert("Sign-up successful!");
-        navigate("/");
+        navigate("/chat", { state: username }); // Pass to chat via state
       } else {
         alert("Sign-up failed!");
       }
@@ -53,6 +52,9 @@ const SignUp: React.FC = () => {
         required
       />
       <button type="submit">Sign Up</button>
+       <p>
+        Already have an account? <a href="/">Sign In</a>
+      </p>
     </form>
   </div>
   );
