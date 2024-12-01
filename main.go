@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -25,24 +26,23 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	// Serve static files from the "dist" folder
-	router.Static("/assets", "./client/dist/assets")
-	router.StaticFile("/", "./client/dist/index.html")
-
-	// Fallback for SPA routing - serve index.html for undefined routes
-	router.NoRoute(func(c *gin.Context) {
-		c.File("./client/dist/index.html")
-	})
-
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
 	router.GET("/getAllUsers/:username", getAllUser)
 
+	// Serve React static files (wildcard path should be last)
+	router.Static("/assets", "./client/dist/assets")
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./client/dist/index.html")
+	})
+
 	router.GET("/ws", handleWebSocket)
 
-	// Start the server on port 8080
-	log.Println("Server started on :8080")
-	if err := router.Run(":8080"); err != nil {
+	port := os.Getenv("PORT") // Fetch the port from environment variables
+	if port == "" {
+		port = "8080" // Default port for local development
+	}
+	if err := router.Run(":" + port); err != nil {
 		log.Fatal("Server failed to start:", err)
 	}
 }
