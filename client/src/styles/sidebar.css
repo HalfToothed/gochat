@@ -16,7 +16,7 @@
     border: 1px solid #000000;
     background-color: #bbbbbb;
     color: #000000;
-    font-size: 18px;
+    font-size: 14px;
   }
   
   .sidebar input:focus {
@@ -32,7 +32,7 @@
     display: flex;
     align-items: center;
     padding: 12px;
-    font-size: 18px;
+    font-size: 14px;
     background-color: #3f3f3f;
     color: #ffffff;
     margin: 8px 0;

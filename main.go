@@ -20,36 +20,46 @@ var upgrader = websocket.Upgrader{
 var clientsMap = make(map[string]*websocket.Conn)
 
 func main() {
-
-	// fs := http.FileServer(http.Dir("./client"))
-	// http.Handle("/", fs)
-
 	initDatabase()
 
 	router := gin.Default()
 	router.Use(cors.Default())
+
+	// Serve static files from the "dist" folder
+	router.Static("/assets", "./client/dist/assets")
+	router.StaticFile("/", "./client/dist/index.html")
+
+	// Fallback for SPA routing - serve index.html for undefined routes
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./client/dist/index.html")
+	})
+
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
 	router.GET("/getAllUsers/:username", getAllUser)
 
-	go router.Run("localhost:3000")
+	router.GET("/ws", handleWebSocket)
 
-	go http.HandleFunc("/ws", handleWebSocket)
-
+	// Start the server on port 8080
 	log.Println("Server started on :8080")
-	http.ListenAndServe(":8080", nil)
+	if err := router.Run(":8080"); err != nil {
+		log.Fatal("Server failed to start:", err)
+	}
 }
 
-func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+func handleWebSocket(c *gin.Context) {
+
 	// Upgrade HTTP request to WebSocket
-	websocket, err := upgrader.Upgrade(w, r, nil)
+	websocket, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		log.Println("Upgrade error:", err)
+		log.Println("Error upgrading to WebSocket:", err)
 		return
 	}
 
+	defer websocket.Close()
+
 	// Extract username from query parameters
-	username := r.URL.Query().Get("username")
+	username := c.Request.URL.Query().Get("username")
 	if username == "" {
 		log.Println("Username not provided")
 		websocket.Close()

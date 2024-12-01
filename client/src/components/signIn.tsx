@@ -46,7 +46,7 @@ const SignIn: React.FC = () => {
       <button type="submit">Sign In</button>
       
       <p>
-        Don't have an account? <a href="/signup">Sign Up</a>
+        Don't have an account? <a href="/auth">Sign Up</a>
       </p>
     </form>
   </div>

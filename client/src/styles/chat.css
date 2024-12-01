@@ -26,9 +26,9 @@
   .message {
     max-width: 75%; /* Message bubbles won't take up more than 75% of the container width */
     padding: 8px 12px;
-    margin: 10px 0;
+    margin: 6px 0;
     border-radius: 15px;
-    font-size: 20px;
+    font-size: 14px;
     font-family: Arial, sans-serif;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -112,7 +112,7 @@
     transform: translateX(-50%); /* Corrects the centering */
     background: linear-gradient(90deg, #3a3a3a, #6e6e6e); /* Subtle gradient */
     color: #ffffff; /* White text for contrast */
-    font-size: 25px; /* Smaller font size */
+    font-size: 20px; /* Smaller font size */
     font-weight: bold;
     text-align: center; /* Center-align the username */
     padding: 8px 15px; /* Padding around the text */

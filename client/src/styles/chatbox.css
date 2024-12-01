@@ -14,7 +14,7 @@
   background-color: #0f0f0f;
   color: #dcdcdc;
   border: none;
-  font-size: 20px; /* Slightly smaller font */
+  font-size: 14px; /* Slightly smaller font */
   width: 70%; /* Ensure it fills the available space */
 }
 
@@ -29,7 +29,7 @@
   padding: 14px 24px;
   margin-left: 30px;
   border-radius: 20%;
-  font-size: 20px;
+  font-size: 14px;
   transition: background-color 0.3s ease;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .chat-header {
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #ffffff; /* A calming blue */
   padding: 15px 0 15px 20px;
