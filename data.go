@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -12,7 +14,21 @@ var db *gorm.DB
 func initDatabase() {
 	var err error
 
-	dsn := "host=localhost user=postgres password=3141 dbname=gochat sslmode=disable TimeZone=Asia/Shanghai"
+	dbHost := os.Getenv("DB_HOST")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbUser := os.Getenv("DB_USERNAME")
+	dbName := os.Getenv("DB_NAME")
+	dbPort := os.Getenv("DB_Port")
+
+	if dbHost == "" || dbPassword == "" || dbUser == "" || dbName == "" || dbPort == "" {
+		log.Fatal("Database environment variables are not properly set")
+	}
+
+	// Build DSN string dynamically
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		dbHost, dbUser, dbPassword, dbName, dbPort,
+	)
 
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
