@@ -7,7 +7,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/joho/godotenv"
 )
 
 var upgrader = websocket.Upgrader{
@@ -20,14 +19,15 @@ var upgrader = websocket.Upgrader{
 
 var clientsMap = make(map[string]*websocket.Conn)
 
-func init() {
+// Commented for Deployment
 
-	err := godotenv.Load(".env")
+// func init() {
 
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
+// 	err := godotenv.Load(".env")
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+// }
 
 func main() {
 	initDatabase()
