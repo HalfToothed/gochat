@@ -18,7 +18,7 @@ func initDatabase() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbUser := os.Getenv("DB_USERNAME")
 	dbName := os.Getenv("DB_NAME")
-	dbPort := os.Getenv("DB_Port")
+	dbPort := os.Getenv("DB_PORT")
 
 	log.Println("DB_HOST:", dbHost)
 	log.Println("DB_PASSWORD:", dbPassword)
