@@ -20,6 +20,12 @@ func initDatabase() {
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_Port")
 
+	log.Println("DB_HOST:", dbHost)
+	log.Println("DB_PASSWORD:", dbPassword)
+	log.Println("DB_USERNAME:", dbUser)
+	log.Println("DB_NAME:", dbName)
+	log.Println("DB_PORT:", dbPort)
+
 	if dbHost == "" || dbPassword == "" || dbUser == "" || dbName == "" || dbPort == "" {
 		log.Fatal("Database environment variables are not properly set")
 	}
