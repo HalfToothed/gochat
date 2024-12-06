@@ -3,14 +3,21 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Auth struct {
+	Id       int    `gorm:"primary key"`
 	Email    string `json:"Email"`
 	Username string `json:"Username"`
 	Password string `json:"Password"`
+}
+
+type User struct {
+	Id       int
+	Username string
 }
 
 func signIn(c *gin.Context) {
@@ -37,7 +44,7 @@ func signIn(c *gin.Context) {
 	}
 
 	// Return success response
-	c.JSON(200, gin.H{"message": "Login successful", "username": storedUser.Username})
+	c.JSON(200, gin.H{"message": "Login successful", "userId": storedUser.Id})
 }
 
 func signUp(c *gin.Context) {
@@ -54,25 +61,23 @@ func signUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, newUser)
+	c.JSON(201, newUser.Id)
 }
 
 func getAllUser(c *gin.Context) {
 
-	var usernames []string
+	var usernames []User
 
-	username := c.Param("username")
-	if username == "" {
-		log.Println("Username not provided")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Username not provided"})
+	userId, err := strconv.Atoi(c.Query("userId"))
+
+	if err != nil {
+		log.Println("UserId not provided")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "UserId not provided"})
 		return
 	}
 
-	// Query only the 'Username' column and scan results into the 'usernames' slice
-	result := db.Model(&Auth{}).Where("username != ?", username).Pluck("Username", &usernames)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-	}
+	// Query only the 'id' column and scan results into the 'usernames' slice
+	db.Model(&Auth{}).Select("id, username").Where("id != ?", userId).Scan(&usernames)
 
 	c.JSON(http.StatusOK, usernames)
 }

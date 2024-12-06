@@ -8,15 +8,15 @@ import (
 )
 
 type Input struct {
-	Sender string `json:"Sender"`
-	Target string `json:"Target"`
+	Id     int    `gorm:"primary key"`
+	Sender int    `json:"Sender"`
+	Target int    `json:"Target"`
 	Text   string `json:"Text"`
 }
 
 func listen(conn *websocket.Conn) {
 
 	for {
-
 		messageType, messageContent, err := conn.ReadMessage()
 
 		if err != nil {
@@ -32,6 +32,11 @@ func listen(conn *websocket.Conn) {
 		if err != nil {
 			log.Println("Error unmarshalling message:", err)
 			continue
+		}
+
+		if err := db.Create(&content).Error; err != nil {
+			log.Println("database error:", err)
+			return
 		}
 
 		// Check if the receiver exists in the clientsMap

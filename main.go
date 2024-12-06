@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var clientsMap = make(map[string]*websocket.Conn)
+var clientsMap = make(map[int]*websocket.Conn)
 
 // Commented for Deployment
 
@@ -37,7 +38,7 @@ func main() {
 
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
-	router.GET("/getAllUsers/:username", getAllUser)
+	router.GET("/getAllUsers", getAllUser)
 
 	// Serve React static files (wildcard path should be last)
 	router.Static("/assets", "./client/dist/assets")
@@ -63,22 +64,23 @@ func handleWebSocket(c *gin.Context) {
 
 	defer websocket.Close()
 
-	// Extract username from query parameters
-	username := c.Request.URL.Query().Get("username")
-	if username == "" {
-		log.Println("Username not provided")
+	// Extract id from query parameters
+	userId, err := strconv.Atoi(c.Query("id"))
+
+	if err != nil {
+		log.Println("UserId not provided")
 		websocket.Close()
 		return
 	}
 
-	clientsMap[username] = websocket
+	clientsMap[userId] = websocket
 
-	log.Printf("WebSocket connected: %s", username)
+	log.Printf("WebSocket connected: %d", userId)
 
 	// Listen for messages
 	listen(websocket)
 
-	delete(clientsMap, username)
+	delete(clientsMap, userId)
 
-	log.Printf("WebSocket disconnected: %s", username)
+	log.Printf("WebSocket disconnected: %d", userId)
 }

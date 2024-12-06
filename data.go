@@ -46,7 +46,7 @@ func initDatabase() {
 	}
 
 	//Migrate the schema
-	err = db.AutoMigrate(&Auth{})
+	err = db.AutoMigrate(&Auth{}, &Input{})
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
