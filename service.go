@@ -115,3 +115,14 @@ func getChatHistory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, messages)
 }
+
+func getOnlineUser(c *gin.Context) {
+
+	keys := make([]int, 0, len(clientsMap))
+	for k := range clientsMap {
+		keys = append(keys, k)
+	}
+
+	c.JSON(http.StatusOK, keys)
+
+}

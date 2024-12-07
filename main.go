@@ -39,6 +39,7 @@ func main() {
 	router.POST("/signUp", signUp)
 	router.GET("/getAllUsers", getAllUser)
 	router.GET("/getChatHistory", getChatHistory)
+	router.GET("/getOnlineUsers", getOnlineUser)
 
 	// Serve React static files (wildcard path should be last)
 	router.Static("/assets", "./client/dist/assets")

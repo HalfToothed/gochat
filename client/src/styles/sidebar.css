@@ -58,34 +58,19 @@
   }
 
 
-  .sidebar .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
+  .sidebar li.online {
+    position: relative;
   }
-  
-  .sidebar .status-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #28a745;
-    position: absolute;
-    top: 10px;
-    right: 10px;
+
+  .sidebar li.online::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 85%; /* Adjust based on your layout */
+      transform: translateY(-50%);
+      width: 8px; /* Diameter of the dot */
+      height: 8px; /* Diameter of the dot */
+      background-color: #ffffff; /* Dot color */
+      border-radius: 50%; /* Makes it a circle */
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Optional glow effect */
   }
-  
-  .sidebar .status-indicator.offline {
-    background-color: #dc3545;
-  }
-  
-  .sidebar li .name {
-    font-size: 16px;
-    color: #fff;
-  }
-  
-  .sidebar li .name.active {
-    color: #4f86f4;
-  }
-  
