@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import "../styles/sidebar.css"
+import { User } from "../model";
 
-export default function Sidebar({ users, onSelectUser }: { users: string[]; onSelectUser: (username: string) => void }) {
+export default function Sidebar({ users, onSelectUser }: { users: User[]; onSelectUser: (User: User) => void }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSelectUser = (e:any, user:string) => {
+  const handleSelectUser = (e:any, user:User) => {
     // Remove the "selected" class from all siblings
     const listItems = e.target.parentNode.children;
     for (const item of listItems) {
@@ -27,10 +28,10 @@ export default function Sidebar({ users, onSelectUser }: { users: string[]; onSe
     />
     <ul>
       {users
-        .filter((user) => user.toLowerCase().includes(searchTerm.toLowerCase()))
+        .filter((user) => user.Username.toLowerCase().includes(searchTerm.toLowerCase()))
         .map((user, index) => (
           <li key={index} onClick={(e) => handleSelectUser(e, user)}>
-            {user}
+            {user.Username}
           </li>
         ))}
     </ul>

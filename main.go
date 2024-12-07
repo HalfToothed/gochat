@@ -65,10 +65,10 @@ func handleWebSocket(c *gin.Context) {
 	defer websocket.Close()
 
 	// Extract id from query parameters
-	userId, err := strconv.Atoi(c.Query("id"))
+	userId, err := strconv.Atoi(c.Query("userId"))
 
 	if err != nil {
-		log.Println("UserId not provided")
+		log.Println("Socket UserId not provided")
 		websocket.Close()
 		return
 	}

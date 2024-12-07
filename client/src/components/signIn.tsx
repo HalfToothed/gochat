@@ -15,8 +15,8 @@ const SignIn: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${api}` + "/signIn", { email, password });
-      if (response.status === 200) {
-        navigate("/chat", { state: response.data.username }); // Pass to chat via state
+      if (response.status === 200) { 
+        navigate("/chat", { state: response.data.user }); // Pass to chat via state
       }  else {
         alert("Invalid credentials");
       }

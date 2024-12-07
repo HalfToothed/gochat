@@ -43,8 +43,13 @@ func signIn(c *gin.Context) {
 		return
 	}
 
+	user := User{
+		Id:       storedUser.Id,
+		Username: storedUser.Username,
+	}
+
 	// Return success response
-	c.JSON(200, gin.H{"message": "Login successful", "userId": storedUser.Id})
+	c.JSON(200, gin.H{"message": "Login successful", "user": user})
 }
 
 func signUp(c *gin.Context) {
@@ -61,7 +66,12 @@ func signUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, newUser.Id)
+	user := User{
+		Id:       newUser.Id,
+		Username: newUser.Username,
+	}
+
+	c.JSON(200, gin.H{"message": "SignUp successful", "user": user})
 }
 
 func getAllUser(c *gin.Context) {

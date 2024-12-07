@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/chatbox.css";
-
-
-type Message = {
-  Sender: string;
-  Target: string;
-  Text: string;
-};
+import { Message, User } from "../model";
 
 export default function ChatBox({
   sender,
@@ -14,8 +8,8 @@ export default function ChatBox({
   messages,
   onSendMessage,
 }: {
-  sender: string;
-  selectedUser: string;
+  sender: User;
+  selectedUser: User;
   messages: Message[];
   onSendMessage: (message: string) => void;
 }) {
@@ -39,13 +33,13 @@ export default function ChatBox({
   return (
     <div className="chat-box-container">
       <div className="chat-header">
-        <span>💬 {selectedUser}</span>
+        <span>💬 {selectedUser.Username}</span>
       </div>
       <div className="message-container" ref={messageContainerRef}>
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${msg.Sender === sender ? "sent" : "received"}`}
+            className={`message ${msg.Sender === sender.Id ? "sent" : "received"}`}
           >
             {msg.Text}
           </div>
