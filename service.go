@@ -91,3 +91,27 @@ func getAllUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, usernames)
 }
+
+func getChatHistory(c *gin.Context) {
+
+	// Parse userId from query parameter
+	userId, err := strconv.Atoi(c.Query("userId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "UserId not provided"})
+		return
+	}
+
+	// Initialize a slice to hold the results
+	var messages []Input
+
+	// Fetch messages where Sender or Target equals userId
+	err = db.Model(&Input{}).
+		Where("sender = ? OR target = ?", userId, userId).
+		Find(&messages).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No messages"})
+		return
+	}
+
+	c.JSON(http.StatusOK, messages)
+}

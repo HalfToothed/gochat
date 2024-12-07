@@ -20,10 +20,9 @@ var upgrader = websocket.Upgrader{
 
 var clientsMap = make(map[int]*websocket.Conn)
 
-// Commented for Deployment
+// UnComment it for Local Devlopment
 
 // func init() {
-
 // 	err := godotenv.Load(".env")
 // 	if err != nil {
 // 		log.Fatal("Error loading .env file")
@@ -39,6 +38,7 @@ func main() {
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
 	router.GET("/getAllUsers", getAllUser)
+	router.GET("/getChatHistory", getChatHistory)
 
 	// Serve React static files (wildcard path should be last)
 	router.Static("/assets", "./client/dist/assets")

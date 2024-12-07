@@ -39,6 +39,38 @@ export default function Chat() {
     fetchUsers();
   }, [api, user.Id]);
 
+  useEffect(() => {
+
+    const fetchChatHistory = async () => {
+
+      try{
+        const response = await fetch(`${api}/getChatHistory?userId=${user.Id}`);
+
+        if (response.ok) {
+          const data = await response.json();
+
+          const oldChats = data.reduce((acc: Record<string, Message[]>, message: Message) => {
+            // Determine the chat key based on Sender and Target
+            const chatKey = message.Sender === user.Id ? message.Target : message.Sender;
+          
+            // Add the message to the corresponding chat group
+            acc[chatKey] = [...(acc[chatKey] || []), message];
+            return acc;
+          }, {});
+          
+          // Update the state with the new chats
+          setChats((prevChats) => ({ ...prevChats, ...oldChats }));
+        }
+      }
+      catch (error) {
+        console.error("Request failed:", error);
+      }
+    };
+
+    fetchChatHistory();
+
+  }, []);
+
   // Process new messages
   useEffect(() => {
     const newMessages = messages.filter((rawMessage) => !processedMessages.has(rawMessage));
