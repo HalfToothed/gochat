@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/signIn.css";
@@ -11,12 +11,43 @@ const SignIn: React.FC = () => {
 
   const api = import.meta.env.VITE_API;
 
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    const userString = localStorage.getItem("user");
+   // Check if token and user are present and valid
+   if (token && userString) {
+    try {
+      const user = JSON.parse(userString); // Try parsing user
+      if (user && typeof user === 'object') {
+        console.log(user);
+        console.log("Token already present, redirecting to chat...");
+        navigate("/chat", { state: user }); // Pass to chat via state
+        return;
+      } else {
+        console.error("Invalid user data format");
+        localStorage.removeItem("token"); // Remove invalid token
+        localStorage.removeItem("user");  // Remove invalid user
+      }
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      localStorage.removeItem("token"); // Remove invalid token
+      localStorage.removeItem("user");  // Remove invalid user
+    }
+  }
+  })
+
+
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
       const response = await axios.post(`${api}` + "/signIn", { email, password });
       if (response.status === 200) { 
-        navigate("/chat", { state: response.data.user }); // Pass to chat via state
+          const { token, user } = response.data; 
+          // Save the token for later API requests
+          localStorage.setItem("token", token);
+          localStorage.setItem("user",JSON.stringify(user))
+
+          navigate("/chat", { state: user }); // Pass to chat via state
       }  else {
         alert("Invalid credentials");
       }

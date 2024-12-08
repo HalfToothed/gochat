@@ -16,7 +16,7 @@ const SignUp: React.FC = () => {
     try {
       const response = await axios.post(`${api}`+"/signUp", { email, username, password });
       if (response.status === 200) {
-        navigate("/chat", { state: response.data.user }); // Pass to chat via state
+        navigate("/");
       } else {
         alert("Sign-up failed!");
       }

@@ -10,9 +10,17 @@ export default function Sidebar({ users, onSelectUser }: { users: User[]; onSele
   const api = import.meta.env.VITE_API;
 
   useEffect(()=>{
+    const token = localStorage.getItem("token") || "";
+
     const fetchOnlineUsers = async () => {
       try {
-        const response = await fetch(`${api}/getOnlineUsers`);
+        const response = await fetch(`${api}/getOnlineUsers`,{
+          method: "GET",
+          headers: {
+            "Authorization": token, // Pass the JWT token
+            "Content-Type": "application/json",
+          },
+        });
         if (response.ok) {
           const data = await response.json();
           setOnlineUsers(data);
@@ -21,6 +29,7 @@ export default function Sidebar({ users, onSelectUser }: { users: User[]; onSele
         }
       } catch (error) {
         console.error("Request failed:", error);
+        setOnlineUsers([]);
       }
     };
 

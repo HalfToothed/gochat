@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
 import ChatBox from "./chatbox";
 import useWebSocket from "../hooks/websocket";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/chat.css";
 import { Message, User } from "../model";
 
@@ -10,6 +10,11 @@ import { Message, User } from "../model";
 export default function Chat() {
   const location = useLocation();
   const user : User = location.state || "";
+  const navigate = useNavigate();
+
+  if(!user){
+    navigate('/', { replace: true });
+  }
 
   const api = import.meta.env.VITE_API;
   const socketUrl = import.meta.env.VITE_WEBSOCKET;
@@ -22,9 +27,20 @@ export default function Chat() {
 
   // Fetch users on component mount
   useEffect(() => {
+
+    const token = localStorage.getItem("token") || "";
+
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${api}/getAllUsers?userId=${user.Id}`);
+        
+        const response = await fetch(`${api}/getAllUsers`,{
+          method: "GET",
+          headers: {
+            "Authorization": token, // Pass the JWT token
+            "Content-Type": "application/json",
+          },
+        });
+
         if (response.ok) {
           const data = await response.json();
           setUsers(data);
@@ -41,10 +57,18 @@ export default function Chat() {
 
   useEffect(() => {
 
+    const token = localStorage.getItem("token") || "";
+
     const fetchChatHistory = async () => {
 
       try{
-        const response = await fetch(`${api}/getChatHistory?userId=${user.Id}`);
+        const response = await fetch(`${api}/getChatHistory`,{
+          method: "GET",
+          headers: {
+            "Authorization": token, // Pass the JWT token
+            "Content-Type": "application/json",
+          },
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -69,7 +93,7 @@ export default function Chat() {
 
     fetchChatHistory();
 
-  }, []);
+  }, [api]);
 
   // Process new messages
   useEffect(() => {

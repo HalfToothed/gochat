@@ -7,13 +7,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Input struct {
-	Id     int    `gorm:"primary key"`
-	Sender int    `json:"Sender"`
-	Target int    `json:"Target"`
-	Text   string `json:"Text"`
-}
-
 func listen(conn *websocket.Conn) {
 
 	for {

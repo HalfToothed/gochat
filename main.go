@@ -33,13 +33,25 @@ func main() {
 	initDatabase()
 
 	router := gin.Default()
-	router.Use(cors.Default())
+
+	// Apply custom CORS middleware (allowing all origins)
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"}, // Frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"}, // Allow Authorization header
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	router.POST("/signIn", signIn)
 	router.POST("/signUp", signUp)
-	router.GET("/getAllUsers", getAllUser)
-	router.GET("/getChatHistory", getChatHistory)
-	router.GET("/getOnlineUsers", getOnlineUser)
+
+	protected := router.Group("/")
+	protected.Use(JWTMiddleware())
+
+	protected.GET("/getAllUsers", getAllUser)
+	protected.GET("/getChatHistory", getChatHistory)
+	protected.GET("/getOnlineUsers", getOnlineUser)
 
 	// Serve React static files (wildcard path should be last)
 	router.Static("/assets", "./client/dist/assets")
