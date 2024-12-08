@@ -2,10 +2,12 @@
 import { useEffect, useState } from "react";
 import "../styles/sidebar.css"
 import { User } from "../model";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ users, onSelectUser }: { users: User[]; onSelectUser: (User: User) => void }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [onlineUsers, setOnlineUsers] = useState<number[]>()
+  const navigate = useNavigate();
 
   const api = import.meta.env.VITE_API;
 
@@ -21,6 +23,16 @@ export default function Sidebar({ users, onSelectUser }: { users: User[]; onSele
             "Content-Type": "application/json",
           },
         });
+
+          // Check if the response is unauthorized
+          if (response.status === 401) {
+            console.error("Unauthorized! Redirecting to login...");
+            localStorage.removeItem("token"); // Clear invalid token
+            localStorage.removeItem("user"); // Clear user data
+            navigate("/"); // Redirect to the sign-in page
+            return;
+          }
+
         if (response.ok) {
           const data = await response.json();
           setOnlineUsers(data);
@@ -36,7 +48,7 @@ export default function Sidebar({ users, onSelectUser }: { users: User[]; onSele
     fetchOnlineUsers();
 
     // Poll the server periodically for online users (optional)
-    const interval = setInterval(fetchOnlineUsers, 5000); // every 5 seconds
+    const interval = setInterval(fetchOnlineUsers, 20000); // every 5 seconds
     return () => clearInterval(interval); // cleanup on unmount
 
 }, [api]);

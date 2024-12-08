@@ -41,12 +41,22 @@ export default function Chat() {
           },
         });
 
+         // Check if the response is unauthorized
+        if (response.status === 401) {
+          console.error("Unauthorized! Redirecting to login...");
+          localStorage.removeItem("token"); // Clear invalid token
+          localStorage.removeItem("user"); // Clear user data
+          navigate("/"); // Redirect to the sign-in page
+          return;
+        }
+
         if (response.ok) {
           const data = await response.json();
           setUsers(data);
         } else {
           console.error("Error fetching users:", response.statusText);
         }
+
       } catch (error) {
         console.error("Request failed:", error);
       }
@@ -69,6 +79,15 @@ export default function Chat() {
             "Content-Type": "application/json",
           },
         });
+
+          // Check if the response is unauthorized
+          if (response.status === 401) {
+            console.error("Unauthorized! Redirecting to login...");
+            localStorage.removeItem("token"); // Clear invalid token
+            localStorage.removeItem("user"); // Clear user data
+            navigate("/"); // Redirect to the sign-in page
+            return;
+          }
 
         if (response.ok) {
           const data = await response.json();
